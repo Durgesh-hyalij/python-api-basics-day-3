@@ -13,6 +13,7 @@ import requests
 # Step 1: Define the API URL
 url = "https://jsonplaceholder.typicode.com/posts/1"
 
+
 # Step 2: Make a GET request
 response = requests.get(url)
 

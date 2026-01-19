@@ -35,7 +35,8 @@ print(f"Found? {response_404.status_code == 200}")
 
 # Example 3: Parsing JSON Data
 print("\n--- Example 3: Parsing JSON ---")
-url = "https://jsonplaceholder.typicode.com/users/1"
+url = "https://jsonplaceholder.typicode.com/users/5"
+
 response = requests.get(url)
 
 # Convert response to Python dictionary
@@ -47,6 +48,7 @@ print(f"Username: {data['username']}")
 print(f"Email: {data['email']}")
 print(f"City: {data['address']['city']}")
 print(f"Company: {data['company']['name']}")
+print(f"Trial Durgesh Phone number: {data['phone']}")
 
 
 # Example 4: Working with a list of items
@@ -89,3 +91,51 @@ for code, meaning in status_codes.items():
 #
 # Exercise 3: Count how many comments are on post ID 1
 #             URL: https://jsonplaceholder.typicode.com/posts/1/comments
+
+
+
+# Exercise 1: Fetch user with ID 5 and print their phone number
+#             URL: https://jsonplaceholder.typicode.com/users/5
+
+print("=== Exercise 1: User Phone Number ===")
+
+url = "https://jsonplaceholder.typicode.com/users/5"
+response = requests.get(url)
+
+data = response.json()   # convert JSON to Python dictionary
+
+print("Phone Number:", data['phone'])
+
+
+# Exercise 2: Check if a resource exists before printing data
+#             if response.status_code == 200:
+#                 print(data)
+#             else:
+#                 print("Resource not found!")
+#
+
+print("\n=== Exercise 2: Check Resource Exists ===")
+
+url = "https://jsonplaceholder.typicode.com/users/50"  # try invalid ID
+response = requests.get(url)
+
+if response.status_code == 200:
+    data = response.json()
+    print("Data Found:")
+    print(data)
+else:
+    print("Resource not found!")
+
+
+
+# Exercise 3: Count how many comments are on post ID 1
+#             URL: https://jsonplaceholder.typicode.com/posts/1/comments
+
+print("\n=== Exercise 3: Count Comments ===")
+
+url = "https://jsonplaceholder.typicode.com/posts/1/comments"
+response = requests.get(url)
+
+comments = response.json()   # this is a LIST
+
+print("Total comments on post 1:", len(comments))

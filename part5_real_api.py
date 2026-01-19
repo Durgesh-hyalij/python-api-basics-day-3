@@ -26,7 +26,12 @@ CITIES = {
     "london": (51.5074, -0.1278),
     "tokyo": (35.6762, 139.6503),
     "sydney": (-33.8688, 151.2093),
-}
+     # newly added cities        #Exercise 1
+    "pune": (18.5204, 73.8567),
+    "nagpur": (21.1458, 79.0882),
+    "nashik": (19.9975, 73.7898),
+    "aurangabad": (19.8762, 75.3433),
+}       
 
 # Popular cryptocurrencies
 CRYPTO_IDS = {
@@ -252,3 +257,47 @@ if __name__ == "__main__":
 #             Use environment variables:
 #             import os
 #             api_key = os.environ.get("OPENWEATHER_API_KEY")
+
+
+#Basic format of real Life APIs
+# try:           
+#     call API                                              
+#     check status
+#     return data
+# except:
+#     handle error
+#     return None
+
+
+#EXERCISE 2
+def compare_cryptos(crypto_list):
+    print("\nComparing Crypto Prices")
+    print("=" * 40)
+    print(f"{'Name':<15}{'Price (USD)'}")
+    print("-" * 40)
+
+    for coin in crypto_list:
+        data = get_crypto(coin)
+
+        if not data:
+            print(f"{coin:<15}Error")
+            continue
+
+        price = data["quotes"]["USD"]["price"]
+        print(f"{data['name']:<15}${price:,.2f}")
+
+    print("=" * 40)
+
+#exercise 3
+def create_post(title, body):
+    url = "https://jsonplaceholder.typicode.com/posts"
+
+    try:
+        r = requests.post(url, json={"title": title, "body": body})
+        r.raise_for_status()
+        return r.json()
+    except:
+        return None
+
+post = create_post("Hello", "This is my post")
+print(post)

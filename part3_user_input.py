@@ -33,24 +33,43 @@ def get_user_info():
 
 
 def search_posts():
-    """Search posts by user ID."""
-    print("\n=== Post Search ===\n")
+    # """Search posts by user ID."""
+    user_id = input("Enter user ID (1 to 10): ")
 
-    user_id = input("Enter user ID to see their posts (1-10): ")
+    url = "https://jsonplaceholder.typicode.com/posts"
+
+    params={"userId": user_id}  # use to filter the APIs
+            
+    response = requests.get(url, params)
+
+    if response.status_code == 200:
+        posts = response.json()
+
+        for post in posts:
+            print(post["title"])
+    else:
+        print("Error fetching posts")
+
+# def search_posts():
+#     """Search posts by user ID."""
+#     print("\n=== Post Search ===\n")
+
+#     user_id = input("Enter user ID to see their posts (1-10): ")
 
     # Using query parameters
-    url = "https://jsonplaceholder.typicode.com/posts"
-    params = {"userId": user_id}
+    
+    # url = "https://jsonplaceholder.typicode.com/posts"
+    # params = {"userId": user_id}
 
-    response = requests.get(url, params=params)
-    posts = response.json()
+    # response = requests.get(url, params=params)
+    # posts = response.json()
 
-    if posts:
-        print(f"\n--- Posts by User #{user_id} ---")
-        for i, post in enumerate(posts, 1):
-            print(f"{i}. {post['title']}")
-    else:
-        print("No posts found for this user.")
+    # if posts:
+    #     print(f"\n--- Posts by User #{user_id} ---")
+    #     for i, post in enumerate(posts, 1):
+    #         print(f"{i}. {post['title']}")
+    # else:
+    #     print("No posts found for this user.")
 
 
 def get_crypto_price():
@@ -97,6 +116,8 @@ def main():
             search_posts()
         elif choice == "3":
             get_crypto_price()
+        elif choice == "5":
+            get_city_name()
         elif choice == "4":
             print("\nGoodbye!")
             break
@@ -120,3 +141,94 @@ if __name__ == "__main__":
 #             Params: completed=true or completed=false
 #
 # Exercise 3: Add input validation (check if user_id is a number)
+
+
+#Exercise 1
+def get_city_name():
+    city = input("Please enter the city name: ")
+
+    url = f"https://geocoding-api.open-meteo.com/v1/search?name={city}"
+
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        data = response.json()
+
+        if "results" in data:
+            latitude = data["results"][0]["latitude"]
+            longitude = data["results"][0]["longitude"]
+
+            print("City:", city)
+            print("Latitude:", latitude)
+            print("Longitude:", longitude)
+        else:
+            print("City not found ❌")
+    else:
+        print("API Error ❌")
+
+
+        
+# get_city_name()
+
+# Exercise 2: Add a function to search todos by completion status
+#             URL: https://jsonplaceholder.typicode.com/todos
+#             Params: completed=true or completed=false
+
+def search_todos_by_status():
+    url = "https://jsonplaceholder.typicode.com/todos"
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        todos = response.json()   # This is a LIST
+
+        user_input = input("Enter completed status (true/false): ").lower()
+
+        # Convert string to boolean
+        if user_input == "true":
+            status = True
+        elif user_input == "false":
+            status = False
+        else:
+            print("Invalid input ❌")
+            return
+
+        print("\nMatching Todos:\n")
+
+        for todo in todos:
+            if todo["completed"] == status:
+                print(f"ID: {todo['id']} | Title: {todo['title']}")
+
+    else:
+        print("API request failed ❌")
+
+
+
+#Exercise 3: Add input validation (check if user_id is a number)
+
+def search_todos_by_user_id():
+    user_id = input("Enter user ID: ")
+
+    # Input validation
+    if not user_id.isdigit():
+        print("Invalid input ❌ User ID must be a number")
+        return
+
+    user_id = int(user_id)   # convert AFTER validation
+
+    url = "https://jsonplaceholder.typicode.com/todos"
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        todos = response.json()
+
+        print(f"\nTodos for user ID {user_id}:\n")
+
+        for todo in todos:
+            if todo["userId"] == user_id:
+                print(f"ID: {todo['id']} | Title: {todo['title']} | Completed: {todo['completed']}")
+    else:
+        print("API Error ❌")
+
+
+
+  
